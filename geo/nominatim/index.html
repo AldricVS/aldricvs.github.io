@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aldric VS : Notmnatim</title>
+    <script type="text/javascript" src="./main.js"></script>
+</head>
+<body>
+    <h1>Nominatim (Géomatique)</h1>
+    <article>
+        <p>
+            Ce site utilise l'API <a href="https://nominatim.org/">Nominatim</a> pour 
+            récupérer les frontières des zones géographiques voulues.
+        </p>
+        <p>
+            Je prendrais le temps de rendre le site plus joli, plus tard
+        </p>
+    </article>
+    <main>
+        <form name="mainForm" onsubmit="return onMainFormSubmit()">
+            <label for="query">Requête</label>
+            <input id="form-query" type="text" name="query" placeholder="Ex : 'Paris, France'"/>
+            
+            <label for="filename">Nom du fichier</label>
+            <input id="form-filename" type="text" name="filename" value="resultat.json"/>
+            
+            <input type="submit" value="Récupérer frontières"/>
+        </form>
+    </main>
+</body>
+</html>
