@@ -18,15 +18,22 @@
         </p>
     </article>
     <main>
-        <form name="mainForm" onsubmit="return onMainFormSubmit()">
-            <label for="query">Requête</label>
-            <input id="form-query" type="text" name="query" placeholder="Ex : 'Paris, France'"/>
-            
-            <label for="filename">Nom du fichier</label>
-            <input id="form-filename" type="text" name="filename" value="resultat.json"/>
-            
-            <input type="submit" value="Récupérer frontières"/>
-        </form>
+        <label for="query">Requête</label>
+        <input id="form-query" type="text" name="query" placeholder="Ex : 'Paris, France'"/>
+        
+        <br/>
+        <br/>
+
+        <label for="lay-filename">Nom du fichier de frontières</label>
+        <input id="layout-filename" type="text" name="lay-filename" value="frontieres.json"/>
+        <button type="submit" onclick="fetchLayout()">Récupérer les frontières</button>
+        
+        <br/>
+        <br/>
+
+        <label for="pos-filename">Nom du fichier de position</label>
+        <input id="position-filename" type="text" name="pos-filename" value="position.geojson"/>
+        <button type="submit" onclick="fetchPosition()">Récupérer la position</button>
     </main>
 </body>
 </html>

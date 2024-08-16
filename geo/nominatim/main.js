@@ -2,17 +2,19 @@
  * Contains all functions used by the website (there is not that many functions)
  */
 
+// ==== FETCH LAYOUT ====
+
 /**
- * Main function launched when submitting the form with query
+ * Main function launched for fetching the layout from a query request
  */
-function onMainFormSubmit(event) {
+function fetchLayout(event) {
     // Get the form input's value
     const query = document.querySelector("input#form-query").value
     // Get the form filename's value
-    const filename = document.querySelector("input#form-filename").value
+    const filename = document.querySelector("input#layout-filename").value
     // Perform some validation
     if (query.trim().length === 0) {
-        window.error("Aucune chaine de caractère vide ne sera acceptée");
+        window.alert("Aucune chaine de caractère vide ne sera acceptée");
         return;
     }
 
@@ -24,7 +26,7 @@ function onMainFormSubmit(event) {
             triggerSaveJson(firstResult, filename);
         }).catch((err) => {
             console.error(err);
-            window.error("Une erreur est survenue lors du traitement de la demande");
+            window.alert("Une erreur est survenue lors du traitement de la demande");
         });
     // Return false for avoiding page reload
     return false;
@@ -54,6 +56,67 @@ async function fetchBoundsFromApi(query) {
     return response.json();
 }
 
+// ==== FETCH POSITION =====
+
+/**
+ * Main function launched for fetching the position from a query request
+ */
+function fetchPosition(event) {
+    // Get the form input's value
+    const query = document.querySelector("input#form-query").value
+    // Get the form filename's value
+    const filename = document.querySelector("input#position-filename").value
+    // Perform some validation
+    if (query.trim().length === 0) {
+        window.alert("Aucune chaine de caractère vide ne sera acceptée");
+        return;
+    }
+
+    // Try fetching the bounds from api and launch the "store results" action
+    fetchPositionsFromApi(query)
+        .then((result) => {
+            // We have a geojson FeatureCollection containing multiple results, 
+            // fetch the first one
+            console.log(result)
+            const firstResult = result["features"][0];
+            triggerSaveJson(firstResult, filename);
+        }).catch((err) => {
+            console.error(err);
+            window.alert("Une erreur est survenue lors du traitement de la demande");
+        });
+    // Return false for avoiding page reload
+    return false;
+}
+
+/**
+ * Get the wanted position from the Nominatim API
+ * @param {string} query 
+ * @returns {object} The requested data from Nominatim API
+ */
+async function fetchPositionsFromApi(query) {
+    const url = new URL("https://nominatim.openstreetmap.org/search.php")
+    const searchParams = new URLSearchParams({
+        polygon_geojson: 0,
+        format: "geojson",
+        q: query
+    });
+    url.search = searchParams.toString();
+    // Perform que query and fetch the result
+    const response = await fetch(url);
+    if (!response.ok) {
+        console.error(response);
+        throw new Error("Error while performing query : error " + response.status);
+    }
+    return response.json();
+}
+
+// ==== OUTPUT FILE HANDLING ====
+
+/**
+ * Launch a download request from the browser
+ * @param {JSON} jsonData The json data to save
+ * @param {string} filename The name of the file to download
+ */
 function triggerSaveJson(jsonData, filename) {
     // Help with snippet from https://stackoverflow.com/a/72490299/14559121
     var textToSave = JSON.stringify(jsonData);
